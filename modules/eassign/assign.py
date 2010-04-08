@@ -32,8 +32,8 @@ def get_pkg_cat(string):
     metadatadirs = []
     
     matches = re.findall(r"(?#start:   )(?:^|\s)[<>~=]*(?#\
-                              cat:     )(?:[A-Za-z0-9+_][A-Za-z0-9+_.-]*/(?#\
-                              pnv:     )[A-Za-z0-9+_][A-Za-z0-9+_.:@-]*)", string)
+                              cat:     )(?:[A-Za-z0-9+_][A-Za-z0-9+_.-]*/)?(?#\
+                              pnv:     )[A-Za-z0-9+_][A-Za-z0-9+_.:@-]*", string)
 
     for name in matches:
         # remove versions at the end
@@ -43,12 +43,19 @@ def get_pkg_cat(string):
                            usedeps:   )(?:\[[!=?A-Za-z0-9+_@-]+\])?(?#\
                            slot deps: )(?::[A-Za-z0-9+_.-]*)?$", "", name)
 
-        if os.path.isdir(os.path.join(PORTDIR, name)):
-            metadatadirs.append(name)
+        parts = name.split('/', 1)
+        if len(parts) == 1:
+            import glob
+            package = parts[0]
+            for e in glob.iglob(os.path.join(PORTDIR, '*', package, 'metadata.xml')):
+                metadatadirs.append(os.path.dirname(e))
         else:
-            (cat, _) = name.split('/', 1)
-            if os.path.isdir(os.path.join(PORTDIR, cat)):
-                metadatadirs.append(cat)
+            if os.path.isdir(os.path.join(PORTDIR, name)):
+                metadatadirs.append(name)
+            else:
+                (cat, _) = name.split('/', 1)
+                if os.path.isdir(os.path.join(PORTDIR, cat)):
+                    metadatadirs.append(cat)
 
     return metadatadirs
 
