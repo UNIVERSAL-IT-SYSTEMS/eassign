@@ -38,7 +38,7 @@ def get_pkg_cat(string):
     for name in matches:
         # remove versions at the end
         name = re.sub(r"(?#version:   )-[0-9.]+[a-z]?(?#\
-                           additions: )(_(alpha|beta|pre|rc|p)[0-9]*)?(?#\
+                           additions: )(_(alpha|beta|pre|rc|p)[0-9]*)*(?#\
                            revisions: )(-r[0-9]*)?(?#\
                            usedeps:   )(\[[!=?A-Za-z0-9+_@-]+\])?(?#\
                            slot deps: )(:[A-Za-z0-9+_.-]*)?$", "", name)
