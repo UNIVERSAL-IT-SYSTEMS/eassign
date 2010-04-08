@@ -12,7 +12,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as et
 
-PORTDIR = "/usr/portage"
+PORTDIR = os.environ.get('PORTDIR', '/usr/portage')
 HERDS = PORTDIR + "/metadata/herds.xml"
 heXML = None
 
