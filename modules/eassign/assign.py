@@ -121,8 +121,8 @@ def main():
     ccs = get_cc_from_string(" ".join(args))
 
     if len(ccs) > 0:
-        print "assign-to: %s" % (ccs[0])
-        print "cc: %s" % (",".join(ccs[1:]))
+        print " assign-to:  %s" % (ccs[0])
+        print "        cc:  %s" % (",".join(ccs[1:]))
 
 
 if __name__ == "__main__":
