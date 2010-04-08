@@ -4,6 +4,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Written by Robert Buchholz <rbu@gentoo.org>
+# Written by Sebastian Pipping <sping@gentoo.org>
+
+VERSION = '1.0'
 
 import sys
 import os
@@ -107,11 +110,15 @@ def get_cc_from_string(string):
     return ccs
 
 def main():
-    if len(sys.argv) < 1:
-        return
-    arg = " ".join(sys.argv[1:])
+    _USAGE = '\n  %prog  [category/]package'
+    from optparse import OptionParser
+    parser = OptionParser(usage=_USAGE, version=VERSION)
+    opts, args = parser.parse_args()
+    if len(args) < 1:
+        parser.print_usage()
+        sys.exit(1)
 
-    ccs = get_cc_from_string(arg)
+    ccs = get_cc_from_string(" ".join(args))
 
     if len(ccs) > 0:
         print "assign-to: %s" % (ccs[0])
