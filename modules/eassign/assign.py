@@ -13,7 +13,7 @@ except ImportError:
     import elementtree.ElementTree as et
 
 PORTDIR = os.environ.get('PORTDIR', '/usr/portage')
-HERDS = PORTDIR + "/metadata/herds.xml"
+HERDS = os.path.join(PORTDIR, "metadata", "herds.xml")
 heXML = None
 
 def uniq(seq):
@@ -42,11 +42,11 @@ def get_pkg_cat(string):
                            usedeps:   )(\[[!=?A-Za-z0-9+_@-]+\])?(?#\
                            slot deps: )(:[A-Za-z0-9+_.-]*)?$", "", name)
 
-        if os.path.isdir("%s/%s" % (PORTDIR, name)):
+        if os.path.isdir(os.path.join(PORTDIR, name)):
             metadatadirs.append(name)
         else:
             (cat, _) = name.split('/', 1)
-            if os.path.isdir("%s/%s" % (PORTDIR, cat)):
+            if os.path.isdir(os.path.join(PORTDIR, cat)):
                 metadatadirs.append(cat)
 
     return metadatadirs
@@ -57,7 +57,7 @@ def get_maintainer_for(directory):
     try:
         if not heXML:
             globals()['heXML'] = et.parse(HERDS)
-        meXML = et.parse("%s/%s/metadata.xml" % (PORTDIR, directory))
+        meXML = et.parse(os.path.join(PORTDIR, directory, "metadata.xml"))
 
         for elem in meXML.getiterator():
             if elem.tag == "herd":
